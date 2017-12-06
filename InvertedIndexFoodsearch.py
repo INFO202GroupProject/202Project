@@ -18,7 +18,7 @@ def makeInvertedIndex(strlist):
     inverteddict={i:{idx for idx, val in enumerate(strlist) if i in val.split()} for i in words} #create dictionary with key as vocabulary word and values as idex of beers that contain vocabulary word
     return inverteddict
     
-OurInvertedIndex=makeInvertedIndex(Description_list) 
+
    
 def andSearch(invertedIndex, query):
     """Function that retrieves indexes of beers that contain any of the words in the user's query"""    
@@ -63,6 +63,7 @@ def RunPairingSearch():
         else:
             word_list=text.split()
             filtered_words = [word for word in word_list if word not in stopwords.words('english')]
+            OurInvertedIndex=makeInvertedIndex(Description_list) 
             andSearchResults=andSearch(OurInvertedIndex, filtered_words)
             if andSearchResults is not None:
                 b=SearchResults(andSearchResults)
