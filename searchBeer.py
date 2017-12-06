@@ -63,17 +63,17 @@ def getOccasion(num, string):
 def getFoodPairing(num, string):
     new_dict = newDict(string)
 
-    df1 = df.ix[new_dict[num][1],['foodPairings','Ingredients','Dishes','IngredientsDishes']]
+    df1 = df.ix[new_dict[num][1],['IngredientsDishes']]
     
-    column_list = ['foodPairings','Ingredients','Dishes','IngredientsDishes']
+    column_list = ['IngredientsDishes']
     
     final_list = []
     for i, value in enumerate(df1):
         if pd.isnull(value):
             continue
-            #final_list.append(str(column_list[num])+': sorry the occassion information is not available\n')
+            final_list.append(str(column_list[i])+': sorry the food pairing information is not available\n')
         else: 
-            final_list.append(str(column_list[i])+': '+str(value)+'\n')
+            final_list.append('Food Pairings: '+str(value)+'\n')
     return print('\n'.join(final_list))
 
 def runBeerSearch():
