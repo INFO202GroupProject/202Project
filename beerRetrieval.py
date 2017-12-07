@@ -23,7 +23,7 @@ def mainPrompt():
 			mainPrompt()
 		if user_input == 4:
 			print("Exiting...")
-			break
+			sys.exit()
 		else:
 			selection = input ("Error. Would you like to retry your search? [y/n]").lower()
 			if selection == 'n':

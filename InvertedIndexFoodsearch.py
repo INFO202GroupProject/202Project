@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 from itertools import chain
 from nltk.corpus import stopwords
 import json
+import shelve
 
 df=pd.read_csv('beer_database_final.csv', encoding='ISO-8859-1')
 
@@ -22,7 +23,11 @@ def makeInvertedIndex(strlist):
     inverteddict=dict(inverteddict)
     return inverteddict
     
-
+def readFromShelf():
+    """Reads the file with inverted indices dictionary, returns the dictionary stored in it"""
+    #print("reading from shelf")
+    myShelve = shelve.open('my.shelve')
+    return myShelve
    
 def andSearch(invertedIndex, query):
     """Function that retrieves indexes of beers that contain any of the words in the user's query"""    
@@ -60,7 +65,8 @@ def printresults(df):
 #with open('InvertedIndex.txt', 'w') as outfile:
     #json.dump(OurInvertedIndex, outfile)
     
-OurInvertedIndex=makeInvertedIndex(Description_list) 
+#OurInvertedIndex=makeInvertedIndex(Description_list) 
+OurInvertedIndex = readFromShelf()
     
 def RunPairingSearch():
     attempts=3
