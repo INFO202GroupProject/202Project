@@ -18,7 +18,6 @@ while True:
 		break
 	if user_input == 3:
 		RunPairingSearch()
-		break
 	else:
 		selection = input ("Error. Would you like to search through our collection again? [y/n]").lower()
 		if selection == 'n':
