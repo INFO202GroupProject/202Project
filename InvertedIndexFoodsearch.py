@@ -1,5 +1,3 @@
-import sys
-sys.path.insert(0, '/anaconda/lib/python3.6/site-packages')
 import pandas as pd
 import numpy as np
 import nltk
