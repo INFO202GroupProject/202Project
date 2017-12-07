@@ -49,7 +49,8 @@ def printresults(df):
     pd.set_option('display.max_colwidth', -1)
     final_list = []
     for key, value in df1.items():
-        final_list.append(str(key)+str(value))
+        result=str(value)
+        final_list.append(result[:-21])
     return print('\n'.join(final_list))
     
     
