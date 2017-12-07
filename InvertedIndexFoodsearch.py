@@ -1,9 +1,12 @@
+import sys
+sys.path.insert(0, '/anaconda/lib/python3.6/site-packages')
 import pandas as pd
 import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from itertools import chain
 from nltk.corpus import stopwords
+import json
 
 df=pd.read_csv('beer_database_final.csv', encoding='ISO-8859-1')
 
@@ -16,6 +19,7 @@ def makeInvertedIndex(strlist):
     and corresponding values are indexes of different beers that conatin the vocabulary word"""
     words=set(chain(*[word_tokenize(i.lower()) for i in strlist])) #create vocabulary of foodpairing words by tokenizing
     inverteddict={i:{idx for idx, val in enumerate(strlist) if i in val.split()} for i in words} #create dictionary with key as vocabulary word and values as idex of beers that contain vocabulary word
+    inverteddict=dict(inverteddict)
     return inverteddict
     
 
@@ -35,7 +39,7 @@ def andSearch(invertedIndex, query):
 def SearchResults(setvalues):
     df=pd.read_csv('beer_database_final.csv', encoding='ISO-8859-1')
     """Function makes a new dataframe containing"""
-    df1=df.loc[list(setvalues),['Beer_Name','ABV','foodPairings','styleName','breweryName','Occassion','country', 'label']]
+    df1=df.loc[list(setvalues),['Beer_Name','styleName','ABV']]
     return df1
     
     
@@ -50,8 +54,15 @@ def printresults(df):
     
     
     
+
+
+#with open('InvertedIndex.txt', 'w') as outfile:
+    #json.dump(OurInvertedIndex, outfile)
+    
+OurInvertedIndex=makeInvertedIndex(Description_list) 
+    
 def RunPairingSearch():
-    attempts=10
+    attempts=3
     while attempts>0:
         text=str(input("What are you thinking about having with your beer?: ")) #Prompt user for query in seach engine
 
@@ -60,10 +71,10 @@ def RunPairingSearch():
             finalSelection = input("Would you like to search for another beer? Y/N\n").lower()
             if finalSelection == 'n':
                 break
+        
         else:
             word_list=text.split()
             filtered_words = [word for word in word_list if word not in stopwords.words('english')]
-            OurInvertedIndex=makeInvertedIndex(Description_list) 
             andSearchResults=andSearch(OurInvertedIndex, filtered_words)
             if andSearchResults is not None:
                 b=SearchResults(andSearchResults)
@@ -71,7 +82,9 @@ def RunPairingSearch():
             else:
                 attempts-=1
                 continue
-            
+            finalSelection = input("Would you like to search for another kind of food? Y/N\n").lower()
+            if finalSelection == 'n':
+                break   
                 
                 
             
