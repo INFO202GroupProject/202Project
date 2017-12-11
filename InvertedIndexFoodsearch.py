@@ -1,3 +1,4 @@
+
 import pandas as pd
 import numpy as np
 import nltk
@@ -6,19 +7,19 @@ from itertools import chain
 from nltk.corpus import stopwords
 import json
 import shelve
+import re
 
 df=pd.read_csv('beer_database_final.csv', encoding='ISO-8859-1')
 
-Description_list=list(df.foodPairings)
+Description_list=list(df.IngredientsDishes)
 
 Description_list=[str(i) for i in Description_list] #change descriptions to string format to allow for word tokenization
 
 def makeInvertedIndex(strlist):
     """Function to make an inverted index; a dictionary where each key is a word in our foodpairing vocabulary, \
     and corresponding values are indexes of different beers that conatin the vocabulary word"""
-    words=set(chain(*[word_tokenize(i.lower()) for i in strlist])) #create vocabulary of foodpairing words by tokenizing
-    inverteddict={i:{idx for idx, val in enumerate(strlist) if i in val.split()} for i in words} #create dictionary with key as vocabulary word and values as idex of beers that contain vocabulary word
-    inverteddict=dict(inverteddict)
+    words=set(chain(*[word_tokenize(re.sub(r'([^\s\w]|_)+', ' ', i).lower()) for i in strlist])) #create vocabulary of foodpairing words by tokenizing
+    inverteddict={i:{idx for idx, val in enumerate(strlist) if i in re.sub(r'([^\s\w]|_)+', ' ', val.lower()).split()} for i in words} #create dictionary with key as vocabulary word and values as idex of beers that contain vocabulary word
     return inverteddict
     
 def readFromShelf():
@@ -78,6 +79,7 @@ def RunPairingSearch():
                 break
         
         else:
+            text=re.sub(r'([^\s\w]|_)+', ' ', text)
             word_list=text.split()
             filtered_words = [word for word in word_list if word not in stopwords.words('english')]
             andSearchResults=andSearch(OurInvertedIndex, filtered_words)
