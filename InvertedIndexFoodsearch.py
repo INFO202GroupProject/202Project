@@ -5,15 +5,15 @@ import nltk
 from nltk.tokenize import word_tokenize
 from itertools import chain
 from nltk.corpus import stopwords
-import json
 import shelve
 import re
 
 df=pd.read_csv('beer_database_final.csv', encoding='ISO-8859-1')
 
-Description_list=list(df.IngredientsDishes)
+df.foodPairings = df.foodPairings.astype(str) #change descriptions to string format to allow for word tokenization
+Description_list=list(df.foodPairings)
 
-Description_list=[str(i) for i in Description_list] #change descriptions to string format to allow for word tokenization
+#Description_list=[str(i) for i in Description_list] 
 
 def makeInvertedIndex(strlist):
     """Function to make an inverted index; a dictionary where each key is a word in our foodpairing vocabulary, \
@@ -57,12 +57,6 @@ def printresults(df):
         final_list.append(result[:-21])
     return print('\n'.join(final_list))
     
-    
-    
-
-
-#with open('InvertedIndex.txt', 'w') as outfile:
-    #json.dump(OurInvertedIndex, outfile)
     
 #OurInvertedIndex=makeInvertedIndex(Description_list) 
 OurInvertedIndex = readFromShelf()
